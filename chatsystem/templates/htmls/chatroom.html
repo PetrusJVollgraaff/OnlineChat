@@ -1,0 +1,37 @@
+{% extends "htmls/layout.html" %}
+{% load static %}
+
+{% block styles %}
+    <link href="{% static "css/chatroom.css" %}?time={% now "u" %}" rel="stylesheet">
+    <title>Lobby</title>
+    <script>
+        const chatSocket = new WebSocket('ws://' +window.location.host +'/ws{{ request.path }}'  );
+    </script>
+   
+
+{% endblock %}
+
+{% block body %}
+<div class="chatroom">
+    <div class="top_bar">
+        <div class="left_ctn">
+            <h1>{{ user.username }}</h1>
+        </div>
+        <div class="right_ctn">
+        </div>
+    </div>
+    <div class="main_ctn">
+        <div id="#chat-text" class="text_ctn">
+            
+        </div>
+        <form id="chat_form">
+            <div class="form-group">
+                <input class="form-control" id="input" type="text" required></br>
+            </div>
+            <button class="btn btn-secondary btn-lg btn-block" id="submit" type="sumit">Send</button>
+        </form>
+    </div>
+</div>
+
+<script src="{% static "js/singlechat.js" %}?time={% now "u" %}" type="text/javascript"></script>
+{% endblock %}

@@ -1,0 +1,19 @@
+/* Login html */ 
+
+.login_ctn{
+    border-width: 2px;
+    border-style: solid;
+    border-color: var(--black_border);
+    border-radius: 5px;
+    margin: 10px auto;
+    width: fit-content;
+    padding: 10px;
+}
+
+.login_ctn  input{
+    border-radius: 5px;
+    font-size: 16px;
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 5px;
+}

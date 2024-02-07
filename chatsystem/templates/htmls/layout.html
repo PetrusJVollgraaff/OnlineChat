@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="{% static "css/color.css" %}?time={% now "u" %}" rel="stylesheet">
+        <link href="{% static "css/main.css" %}?time={% now "u" %}" rel="stylesheet">
+        <script src="{% static "js/main.js" %}?time={% now "u" %}" type="text/javascript"></script>
+        {% block styles %}
+        
+        {% endblock %}        
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="left_nav" data-t="{% if user.is_authenticated %}3{% else %}1{% endif %}">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="navbar-brand" href="/">Main</a>
+                    </li>
+                </ul>
+            </div>
+          
+            <div class="right_nav">
+              <ul class="navbar-nav mr-auto" data-t="2">
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <div class="nav-link" data-id="{{ user.id }}" >{{ user.username }}</div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
+                {% endif %}
+              </ul>
+            </div>
+          </nav>
+          
+
+        {% block body %}
+        {% endblock %}
+    <body>
+<html>

@@ -1,0 +1,46 @@
+.main_ctn {
+    display: grid;
+    grid-template-columns: 20% 60% 20%;
+    width: 100%;
+    text-align: center;
+}
+
+.top_bar{
+    display: grid;
+    grid-template-columns: repeat(2, 50%);
+    padding: 15px 25px
+}
+
+.top_bar h1{
+    margin: 0px;
+}
+
+.top_bar > .left_ctn{
+    text-align: left;
+}
+
+.top_bar > .right_ctn{
+    text-align: right;
+}
+
+.contact_ctn {
+    display: grid;
+    grid-template-columns: 55px calc(100% - 55px);
+}
+
+.contact_ctn .profile_img {
+    height: 55px;
+    width: 55px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.contact_ctn .profile_img img {
+    height: 100%;
+    width: 100%;
+}
+
+.contact_ctn .profile_username {
+    padding: 5px 15px;
+    text-align: left;
+}

@@ -1,0 +1,22 @@
+.chatroom {
+    height: calc(100% - 71px);
+}
+
+.chatroom .main_ctn,
+.chatroom .main_ctn .text_ctn {
+    height: calc(100% - 60px);
+}
+
+.chatroom .main_ctn .text_ctn {
+    max-height: calc(100% - 60px);
+    overflow-y: auto;
+}
+
+.chatroom .main_ctn .text_ctn .text_bubble {
+    border: 1px solid;
+    margin: 10px;
+    border-radius: 5px;
+    padding: 15px;
+    min-width: 160px;
+    max-width: 500px;
+}

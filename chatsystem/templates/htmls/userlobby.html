@@ -1,0 +1,49 @@
+{% extends "htmls/layout.html" %}
+{% load static %}
+
+{% block styles %}
+    <link href="{% static "css/lobby.css" %}?time={% now "u" %}" rel="stylesheet">
+    <script src="{% static "js/lobby.js" %}?time={% now "u" %}" type="text/javascript"></script>
+    <title>Lobby</title>
+{% endblock %}
+
+{% block body %}
+<div class="user_lobby">
+    <div class="top_bar">
+        <div class="left_ctn">
+            <h1>{{ user.username }}</h1>
+        </div>
+        <div class="right_ctn">
+            <label for="search">Choose your browser from the list:</label>
+            <input type="text" name="search" list="users" onkeydown="searchUsers(this, event);">
+            <datalist id="users"></datalist>
+        </div>
+    </div>
+    <div class="main_ctn">
+        <div class="left_side_bar">
+        {% for group in groups %}
+            <div class="group_ctn" data-id="{{ group.id }}" >
+                <div class="profile_img"><img src="{% static "img/group.png" %}?time={% now "u" %}"></div>
+                <div class="profile_username">{{ group.groupname }}</div>
+            </div>
+        {% empty %}
+            <h3>No Groups</h3>
+        {% endfor %}
+        </div>
+        <div class="center_ctn">
+        </div>
+        <div class="right_side_bar">
+            {% for contact in contacts %}
+                <a href="/chat/{{contact.queryid}}">
+                    <div class="contact_ctn" data-id="{{ contact.id }}" >
+                        <div class="profile_img"><img src="{% static "img/user.png" %}?time={% now "u" %}"></div>
+                        <div class="profile_username">{{ contact.username }}</div>
+                    </div>
+                </a>
+            {% empty %}
+                <h3>No Contact</h3>
+            {% endfor %}
+            </div>
+    </div>
+</div>
+{% endblock %}
