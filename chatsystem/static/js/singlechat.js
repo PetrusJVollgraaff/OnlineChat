@@ -50,14 +50,12 @@ class ChatBubbles{
 }
 
 (function () {
-    
     fetch('/getBubbles', {
         method: "GET",
         headers: { "X-CSRFToken": getCookie("csrftoken"), }
     })
     .then((response) => {return response.json()})
-    .then((data) => { 
-        console.log(data)
+    .then((data) => {
         var bubbls = new ChatBubbles(data)
         bubbls.build()
         bubbls.eventlistners()
