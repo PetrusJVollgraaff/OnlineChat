@@ -11,12 +11,13 @@ class ChatBubble{
 
 class ChatBubbles{
     constructor(data){
-        this.messages = data
+        this.messages       = data
+        this.nestedElement  = document.getElementById('#chat-text')
     }
 
     buildBubble(data){
         var bubble = new ChatBubble(data)
-        document.getElementById('#chat-text').insertAdjacentHTML("beforeend", bubble.build() )
+        this.nestedElement.insertAdjacentHTML("beforeend", bubble.build() )
     }
 
     build(){
@@ -24,6 +25,7 @@ class ChatBubbles{
         this.messages.forEach(function(item, index){
             _.buildBubble(item)
         })
+        _.nestedElement.scrollTo(0, _.nestedElement.scrollHeight);
     }
 
     eventlistners(){
@@ -42,6 +44,7 @@ class ChatBubbles{
         
         chatSocket.onmessage = function (e) {
             _.buildBubble( JSON.parse(e.data) );
+            _.nestedElement.scrollTo(0, _.nestedElement.scrollHeight);
         }
     }
 }

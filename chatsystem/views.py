@@ -4,6 +4,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from .models import *
+from .function import *
+from .userslog import *
 from .SQL import *
 import json
 from urllib import parse
@@ -41,13 +43,23 @@ def SearchUser(request):
 @csrf_exempt
 @login_required(login_url='/')  
 def Chat(request, queryid, querytype):
-    return render(request, "htmls/chatroom.html")
+    #active_users = get_active_users()
+    #print(active_users) 
+    loginUser1 = request.user.id
+    loginUser2 = GetUser2_ID(loginUser1, queryid)
+    recieverSQL = CustomerUser.objects.get(id=loginUser2)
+    isOnline = "offline"
+
+    #if not active_users.get(id=loginUser2) == None:
+    #    isOnline = "online"
+
+    return render(request, "htmls/chatroom.html", {"TopName": recieverSQL.username, "isOnline": isOnline})
 
 
 @csrf_exempt
 @login_required(login_url='/')  
 def GroupChat(request, queryid, querytype):
-    return render(request, "htmls/chatroom.html")
+    return render(request, "htmls/chatroom.html", {"TopName": "groupname"})
 
 @csrf_exempt
 @login_required(login_url='/')  

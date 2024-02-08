@@ -2,7 +2,8 @@ import json
 from django.db.models import Q
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
-from .models import UserMessages, OneOnOneChat, CustomerUser, GroupMembers, ChatGroup
+from .models import *
+from .function import *
 
 class ChatSingle(WebsocketConsumer):
     def __init__(self, *args, **kwargs):
@@ -19,10 +20,19 @@ class ChatSingle(WebsocketConsumer):
 
         self.accept()
 
+    def disconnect(self, close_code):
+        # Remove the user from the WebSocket group
+        self.channel_layer.group_discard(
+            self.gueryID,
+            self.channel_name
+        )
+
     def receive(self, text_data):
         senderID = self.scope['user'].id
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+        data_json = json.loads(text_data)
+        message = data_json['message']
+        print("hello wolrd")
+        print( data_json['reciever'] )
 
         isSend, username = oneonone_message( message, senderID, self.gueryID )
 
@@ -61,24 +71,31 @@ class ChatGroups(WebsocketConsumer):
         )
 
         self.accept()
-   
+    
+    def disconnect(self, close_code):
+        # Remove the user from the WebSocket group
+        self.channel_layer.group_discard(
+            self.gueryID,
+            self.channel_name
+        )
 
     def receive(self, text_data):
         senderID = self.scope['user'].id
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
+        
 
         isSend, username = group_message(message, senderID, self.gueryID)
 
         if isSend:
-            async_to_sync(self.channel_layer.group_send)(
+            '''async_to_sync(self.channel_layer.group_send)(
                 self.gueryID,
                 {
                     'type':'chat_message',
                     'message':message,
                     'username': username,
                 }
-            )
+            )'''
 
     def chat_message(self, event):       
         message = event['message']
@@ -97,7 +114,8 @@ def oneonone_message(message, sender, hastagid):
     senderSQL   = CustomerUser.objects.get(id=sender)
     username    = senderSQL.username
 
-    usercontacts    = OneOnOneChat.objects.filter( 
+    reciever = GetUser2_ID(sender, hastagid)
+    '''usercontacts    = OneOnOneChat.objects.filter( 
         (Q( initiator_id=sender) | Q(responder_id=sender) ) 
         & Q(hashtagid=hastagid)
     )
@@ -107,15 +125,15 @@ def oneonone_message(message, sender, hastagid):
             reciever = usercontacts[0].responder_id
         elif(usercontacts[0].responder_id == sender):
             reciever = usercontacts[0].initiator_id
+'''
+    if(reciever != 0):
+        recieverSQL = CustomerUser.objects.get(id=reciever)
 
-        if(reciever != 0):
-            recieverSQL = CustomerUser.objects.get(id=reciever)
-
-            messageSQL  = UserMessages(sender=senderSQL, message=message, receiver=recieverSQL, option="chat")
-            messageSQL.save()
-            isSend = True
+        messageSQL  = UserMessages(sender=senderSQL, message=message, receiver=recieverSQL, option="chat")
+        messageSQL.save()
+        isSend = True
         
-    return isSend, username
+    return isSend, username, 
 
 def group_message(message, sender, hastagid):
     isSend      = False
