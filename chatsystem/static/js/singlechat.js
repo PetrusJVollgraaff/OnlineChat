@@ -41,7 +41,6 @@ class ChatBubbles{
             return false;
         };
         
-        
         chatSocket.onmessage = function (e) {
             _.buildBubble( JSON.parse(e.data) );
             _.nestedElement.scrollTo(0, _.nestedElement.scrollHeight);
@@ -59,6 +58,10 @@ class ChatBubbles{
         var bubbls = new ChatBubbles(data)
         bubbls.build()
         bubbls.eventlistners()
+
+        var videoelm = new VideoSystem()
+
+        videoelm.eventlistner()
     })
         
 })();

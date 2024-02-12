@@ -5,7 +5,10 @@
     <link href="{% static "css/chatroom.css" %}?time={% now "u" %}" rel="stylesheet">
     <title>Lobby</title>
     <script>
-        const chatSocket = new WebSocket('ws://' +window.location.host +'/ws{{ request.path }}'  );
+        const chatSocket = new WebSocket('ws://' +window.location.host +'/ws/{{querytype}}/{{ queryid }}/'  );
+        {% if querytype == "chat" %}
+        const videoSocket = new WebSocket('ws://' +window.location.host +'/ws/video/{{ queryid }}/'  );
+        {% endif %}
     </script>
    
 
@@ -16,23 +19,28 @@
     <div class="top_bar">
         <div class="left_ctn">
             <h1>{{ TopName }}</h1>
-            <h4>{{ isOnline }}<h4>
+            <h4>{{ isOnline }}</h4>
         </div>
         <div class="right_ctn">
+            <button id="Call_Btn">Call</button>
         </div>
     </div>
-    <div class="main_ctn">
-        <div id="#chat-text" class="text_ctn">
-            
+    <div class="main_ctn" data-t="chat">
+        <div class="video_ctn" id="video_ctn">
         </div>
-        <form id="chat_form">
-            <div class="form-group">
-                <input class="form-control" id="input" type="text" required></br>
+        <div class="chat_ctn">
+            <div id="#chat-text" class="text_ctn">
             </div>
-            <button class="btn btn-secondary btn-lg btn-block" id="submit" type="sumit">Send</button>
-        </form>
+            <form id="chat_form">
+                <div class="form-group">
+                    <input class="form-control" id="input" type="text" required></br>
+                </div>
+                <button class="btn btn-secondary btn-lg btn-block" id="submit" type="sumit">Send</button>
+            </form>
+        </div>
     </div>
 </div>
 
 <script src="{% static "js/singlechat.js" %}?time={% now "u" %}" type="text/javascript"></script>
+<script src="{% static "js/videochat.js" %}?time={% now "u" %}" type="text/javascript"></script>
 {% endblock %}

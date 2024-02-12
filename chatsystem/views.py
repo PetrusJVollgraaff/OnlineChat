@@ -45,6 +45,7 @@ def SearchUser(request):
 def Chat(request, queryid, querytype):
     #active_users = get_active_users()
     #print(active_users) 
+
     loginUser1 = request.user.id
     loginUser2 = GetUser2_ID(loginUser1, queryid)
     recieverSQL = CustomerUser.objects.get(id=loginUser2)
@@ -53,7 +54,14 @@ def Chat(request, queryid, querytype):
     #if not active_users.get(id=loginUser2) == None:
     #    isOnline = "online"
 
-    return render(request, "htmls/chatroom.html", {"TopName": recieverSQL.username, "isOnline": isOnline})
+    return render(request, "htmls/chatroom.html", 
+                    {
+                        "TopName": recieverSQL.username, 
+                        "isOnline": isOnline, 
+                        "queryid": queryid,
+                        "querytype": querytype
+                    }
+                  )
 
 
 @csrf_exempt

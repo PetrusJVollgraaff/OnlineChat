@@ -1,6 +1,6 @@
 import json
 from django.db.models import Q
-from channels.generic.websocket import WebsocketConsumer
+from channels.generic.websocket import WebsocketConsumer, AsyncWebsocketConsumer
 from asgiref.sync import async_to_sync
 from .models import *
 from .function import *
@@ -31,8 +31,6 @@ class ChatSingle(WebsocketConsumer):
         senderID = self.scope['user'].id
         data_json = json.loads(text_data)
         message = data_json['message']
-        print("hello wolrd")
-        print( data_json['reciever'] )
 
         isSend, username = oneonone_message( message, senderID, self.gueryID )
 
@@ -105,6 +103,36 @@ class ChatGroups(WebsocketConsumer):
             'type':'chat',
             'message':message,
             'username': username,
+        }))
+
+class VideoCallSingle(AsyncWebsocketConsumer):
+    async def connect(self):
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        pass
+
+    async def receive(self, text_data):
+        text_data_json = json.loads(text_data)
+        message = text_data_json['message']
+
+        await self.send(text_data=json.dumps({
+            'message': message
+        }))
+
+class VideoCallGroup(AsyncWebsocketConsumer):
+    async def connect(self):
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        pass
+
+    async def receive(self, text_data):
+        text_data_json = json.loads(text_data)
+        message = text_data_json['message']
+
+        await self.send(text_data=json.dumps({
+            'message': message
         }))
 
 

@@ -31,27 +31,27 @@ def SearchUsers(search):
 def UserContact(userid):
     row = []
     with connection.cursor() as cursor:
-        cursor.execute('''
-            SELECT * FROM(
-                SELECT 
-                    OC.responder_id AS 'id',
-                    OC.hashtagid AS 'queryid',
-                    CU.username AS 'username'
-                FROM chatsystem_oneononechat OC
-                LEFT JOIN chatsystem_customeruser CU ON CU.id = OC.responder_id
-                WHERE OC.initiator_id='''+str(userid)+''' AND OC.isDeleted=0
-
-                UNION
-
-                SELECT 
-                    OC.initiator_id AS 'id',
-                    OC.hashtagid AS 'queryid',
-                    CU.username AS 'username'
-                FROM chatsystem_oneononechat OC
-                LEFT JOIN chatsystem_customeruser CU ON CU.id = OC.initiator_id
-                WHERE OC.responder_id='''+str(userid)+''' AND OC.isDeleted=0
-            ) ORDER BY username
-        ''')
+        cursor.execute(
+            "SELECT * FROM( "+
+            "    SELECT "+
+            "        OC.responder_id AS 'id', "+
+            "        OC.hashtagid AS 'queryid', "+
+            "        CU.username AS 'username' "+
+            "    FROM chatsystem_oneononechat OC "+
+            "    LEFT JOIN chatsystem_customeruser CU ON CU.id = OC.responder_id "+
+            "    WHERE OC.initiator_id=%s AND OC.isDeleted=0 "+
+            
+            "    UNION "+
+            
+            "    SELECT "+
+            "        OC.initiator_id AS 'id', "+
+            "        OC.hashtagid AS 'queryid', "+
+            "        CU.username AS 'username' "+
+            "    FROM chatsystem_oneononechat OC "+
+            "    LEFT JOIN chatsystem_customeruser CU ON CU.id = OC.initiator_id "+
+            "    WHERE OC.responder_id=%s AND OC.isDeleted=0 "+
+            ") ORDER BY username "
+        , [str(userid), str(userid)] )
         row = dictfetchall(cursor)       
         cursor.close()     
         
@@ -60,16 +60,16 @@ def UserContact(userid):
 def UserGroup(userid):    
     row = []
     with connection.cursor() as cursor:
-        cursor.execute('''
-             SELECT 
-                CG.contact_id as id,
-                CG.hashtagid as queryid,
-                GM.groupname as groupname
+        cursor.execute(
+            "SELECT "+
+            "    CG.contact_id as id, "+
+            "    CG.hashtagid as queryid, "+
+            "    GM.groupname as groupname "+
                        
-            FROM chatsystem_groupmember GM
-            LEFT JOIN chatsystem_chatgroup CG ON CU.id = UCB.contact_id
-            WHERE CG.groupmember_id='''+str(userid)+''' AND CG.isDeleted=0
-        ''')
+            "FROM chatsystem_groupmember GM "+
+            "LEFT JOIN chatsystem_chatgroup CG ON CU.id = UCB.contact_id "+
+            "WHERE CG.groupmember_id=%s AND CG.isDeleted=0 "
+        ,[str(userid), str(userid)])
         row = dictfetchall(cursor)       
         cursor.close()     
         
@@ -78,33 +78,33 @@ def UserGroup(userid):
 def GetSingleChatM(userid, hashtag):
     row = []
     with connection.cursor() as cursor:        
-        cursor.execute('''
-           SELECT message, username FROM(
-                SELECT
-                    UM.message AS 'message',
-                    CU.username AS 'username',
-                    UM.addeddate
-                FROM chatsystem_usermessages UM
-                JOIN chatsystem_oneononechat OC ON OC.initiator_id = UM.sender_id
-                LEFT JOIN chatsystem_customeruser CU ON CU.id = OC.responder_id
-                WHERE (UM.sender_id='''+str(userid)+''' OR UM.receiver_id='''+str(userid)+''')
-                    AND UM.isDeleted=0
-                    AND OC.hashtagid=TRIM(' '''+hashtag+''' ')
+        cursor.execute(
+            "SELECT message, username FROM( "+
+            "    SELECT "+
+            "        UM.message AS 'message', "+
+            "        CU.username AS 'username', "+
+            "        UM.addeddate "+
+            "    FROM chatsystem_usermessages UM "+
+            "    JOIN chatsystem_oneononechat OC ON OC.initiator_id = UM.sender_id "+
+            "    LEFT JOIN chatsystem_customeruser CU ON CU.id = OC.responder_id "+
+            "    WHERE (UM.sender_id=%s OR UM.receiver_id=%s) "+
+            "        AND UM.isDeleted=0 "+
+            "        AND OC.hashtagid=%s "+
               
-                UNION
+            "    UNION "+
 
-                SELECT
-                    UM.message AS 'message',
-                    CU.username AS 'username',
-                    UM.addeddate
-                FROM chatsystem_usermessages UM
-                JOIN chatsystem_oneononechat OC ON OC.responder_id=UM.receiver_id
-                LEFT JOIN chatsystem_customeruser CU ON CU.id = OC.initiator_id
-                WHERE (UM.sender_id='''+str(userid)+''' OR UM.receiver_id='''+str(userid)+''')
-                    AND UM.isDeleted=0
-                    AND OC.hashtagid=TRIM(' '''+hashtag+''' ')
-            ) ORDER BY addeddate           
-        ''')
+            "    SELECT "+
+            "        UM.message AS 'message', "+
+            "        CU.username AS 'username', "+
+            "        UM.addeddate "+
+            "    FROM chatsystem_usermessages UM "+
+            "    JOIN chatsystem_oneononechat OC ON OC.responder_id=UM.receiver_id "+
+            "    LEFT JOIN chatsystem_customeruser CU ON CU.id = OC.initiator_id "+
+            "    WHERE (UM.sender_id=%s OR UM.receiver_id=%s) "+
+            "        AND UM.isDeleted=0 "+
+            "        AND OC.hashtagid=%s "+
+            ") ORDER BY addeddate "
+        ,[str(userid), str(userid), hashtag, str(userid), str(userid), hashtag])
         row = dictfetchall(cursor)       
         cursor.close()     
         
@@ -114,33 +114,33 @@ def GetGroupChatM(userid, hashtag):
     row = []
     
     with connection.cursor() as cursor:        
-        cursor.execute('''
-           SELECT message, username FROM(
-                SELECT
-                    UM.message AS 'message',
-                    CU.username AS 'username',
-                    UM.addeddate
-                FROM chatsystem_usermessages UM
-                JOIN chatsystem_oneononechat OC ON OC.initiator_id = UM.sender_id
-                LEFT JOIN chatsystem_customeruser CU ON CU.id = OC.responder_id
-                WHERE (UM.sender_id='''+str(userid)+''' OR UM.receiver_id='''+str(userid)+''')
-                    AND UM.isDeleted=0
-                    AND OC.hashtagid=TRIM(' '''+hashtag+''' ')
+        cursor.execute(
+            "SELECT message, username FROM( "+
+            "    SELECT "+
+            "        UM.message AS 'message', "+
+            "        CU.username AS 'username', "+
+            "        UM.addeddate "+
+            "    FROM chatsystem_usermessages UM "+
+            "    JOIN chatsystem_oneononechat OC ON OC.initiator_id = UM.sender_id "+
+            "    LEFT JOIN chatsystem_customeruser CU ON CU.id = OC.responder_id "+
+            "    WHERE (UM.sender_id=%s OR UM.receiver_id=%s) "+
+            "        AND UM.isDeleted=0 "+
+            "        AND OC.hashtagid=%s "+
               
-                UNION
+            "    UNION "+
 
-                SELECT
-                    UM.message AS 'message',
-                    CU.username AS 'username',
-                    UM.addeddate
-                FROM chatsystem_usermessages UM
-                JOIN chatsystem_oneononechat OC ON OC.responder_id=UM.receiver_id
-                LEFT JOIN chatsystem_customeruser CU ON CU.id = OC.initiator_id
-                WHERE (UM.sender_id='''+str(userid)+''' OR UM.receiver_id='''+str(userid)+''')
-                    AND UM.isDeleted=0
-                    AND OC.hashtagid=TRIM(' '''+hashtag+''' ')
-            ) ORDER BY addeddate           
-        ''')
+            "    SELECT "+
+            "        UM.message AS 'message', "+
+            "        CU.username AS 'username', "+
+            "        UM.addeddate "+
+            "    FROM chatsystem_usermessages UM "+
+            "    JOIN chatsystem_oneononechat OC ON OC.responder_id=UM.receiver_id "+
+            "    LEFT JOIN chatsystem_customeruser CU ON CU.id = OC.initiator_id "+
+            "    WHERE (UM.sender_id=%s OR UM.receiver_id=%s) "+
+            "        AND UM.isDeleted=0 "+
+            "        AND OC.hashtagid=%s "+
+            ") ORDER BY addeddate "
+        ,[str(userid), str(userid), hashtag, str(userid), str(userid), hashtag])
         row = dictfetchall(cursor)       
         cursor.close()     
         

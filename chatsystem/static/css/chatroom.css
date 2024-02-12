@@ -1,10 +1,33 @@
 .chatroom {
     height: calc(100% - 71px);
+    padding: 20px;
+}
+
+.chatroom .top_bar {
+    display: grid;
+    grid-template-columns: repeat(2,50%);
+}
+
+.chatroom .top_bar .left_ctn h1,
+.chatroom .top_bar .left_ctn h4{
+    width: fit-content;
+    display: inline-block;
+    margin: 0px;
+}
+
+.chatroom .top_bar .left_ctn h4{
+    margin-left: 5px;
+}
+
+.chatroom .top_bar .right_ctn{
+    text-align: right;
 }
 
 .chatroom .main_ctn,
+.chatroom .main_ctn .chat_ctn,
 .chatroom .main_ctn .text_ctn {
     height: calc(100% - 60px);
+    
 }
 
 .chatroom .main_ctn .text_ctn {
@@ -19,4 +42,31 @@
     padding: 15px;
     min-width: 160px;
     max-width: 500px;
+}
+
+.chatroom .main_ctn .chat_ctn .form-group {
+    display: inline-block;
+}
+
+.chatroom .main_ctn #video_ctn {
+    height: 400px;
+    text-align: center;
+}
+
+.chatroom .main_ctn #video_ctn > div{
+    height: calc(100% - 30px);
+}
+
+.chatroom .main_ctn #video_ctn video{
+    height: 100%;
+    border: 1px solid gray ;
+    background-color: lightgray;
+}
+
+.chatroom .main_ctn:not([data-t="both"]) #video_ctn{
+    display: none;
+}
+
+.chatroom .main_ctn[data-t="both"] .chat_ctn{
+    height: calc(100% - 340px);
 }
