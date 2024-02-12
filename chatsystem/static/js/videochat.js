@@ -57,8 +57,14 @@ class VideoSystem{
     async #assignElm(){
         this.localStream = await navigator.mediaDevices.getUserMedia({video:true, audio:false})
         
+        
+    }
+
+    async createOffer(){
+        this.peerConnection = new RTCPeerConnection()
+
         this.remoteStream = new MediaStream()
 
-        document.getElementById("user-1").srcObject = this.localStream
+        document.getElementById("user-2").srcObject = this.remoteStream
     }
 }
