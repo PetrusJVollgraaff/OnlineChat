@@ -6,6 +6,8 @@
 .chatroom .top_bar {
     display: grid;
     grid-template-columns: repeat(2,50%);
+    background-color: var(--tab_backcolor);
+    padding: 5px;
 }
 
 .chatroom .top_bar .left_ctn h1,
@@ -13,6 +15,7 @@
     width: fit-content;
     display: inline-block;
     margin: 0px;
+    color: var(--white_text)
 }
 
 .chatroom .top_bar .left_ctn h4{
@@ -42,10 +45,30 @@
     padding: 15px;
     min-width: 160px;
     max-width: 500px;
+    background-color: var(--chat_bubble);
+    color: var(--black_text)
+}
+
+.chatroom .main_ctn .chat_ctn form#chat_form {
+    padding: 5px 10px;
 }
 
 .chatroom .main_ctn .chat_ctn .form-group {
     display: inline-block;
+    background: var(--white_backcolor);
+    border-radius: 5px;
+}
+
+.chatroom .main_ctn .chat_ctn .form-group input#input {
+    border: none;
+    height: 100%;
+    border-radius: 5px 0px 0px 5px;
+    padding-left: 5px;
+}
+
+.chatroom .main_ctn .chat_ctn .form-group input#input:focus {
+    border: none;
+    outline: none;
 }
 
 .chatroom .main_ctn #video_ctn {

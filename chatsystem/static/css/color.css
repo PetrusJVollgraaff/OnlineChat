@@ -1,5 +1,13 @@
 :root{
     --white_text: rgb(255, 255, 255);
+    --white_backcolor: rgb(255, 255, 255);
     --black_text: rgb(0, 0, 0);
     --black_border: rgb(0, 0, 0);
+    --main_backcolor: rgb(58, 58, 58);
+    --nav_backcolor: rgb(77, 77, 77);
+    --tab_backcolor: rgb(105,105,105);
+    --red_button: rgb(255,0,0);
+    --white_button: rgb(255, 255, 255);
+    --main_button:rgb(58, 58, 58);
+    --chat_bubble:rgb(255, 255, 255);
 }
