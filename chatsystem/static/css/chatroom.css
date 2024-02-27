@@ -93,3 +93,22 @@
 .chatroom .main_ctn[data-t="both"] .chat_ctn{
     height: calc(100% - 340px);
 }
+
+.pop_call_notify {
+    position: fixed;
+    z-index: 9;
+    background-color: var(--white_backcolor);
+    color: var(--black_text);
+    padding: 10px 15px;
+    border-radius: 10px;
+}
+
+.pop_call_notify[data-pos="top_right"] {
+    right: 10px;
+    top: 10px;
+}
+
+.pop_call_notify[data-pos="top_left"]{
+    top: 10px;
+    left: 10px;
+}
