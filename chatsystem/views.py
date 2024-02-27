@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse, JsonResponse
+from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -39,6 +39,52 @@ def SearchUser(request):
         usercontacts = list(usercontacts.values("id", "username", "first_name", "last_name") )
 
     return JsonResponse(usercontacts, safe=False )
+
+@csrf_exempt
+@login_required(login_url='/')
+def SearchOpen(request):
+    if request.method == 'POST':
+        user1 = request.user.id
+        jsonData    = json.loads(request.body)
+        user2      = jsonData.get("searchid")
+
+        print(user1, user2)
+        usercontacts = OneOnOneChat.objects.filter( 
+            (Q( initiator_id=user1) & Q(responder_id=user2) ) 
+            | (Q( initiator_id=user2) & Q(responder_id=user1) ) 
+        )
+
+        print(usercontacts, usercontacts[0].hashtagid)
+
+        if(usercontacts == None):
+            pass
+        else:
+            print("hello")
+            return HttpResponseRedirect( f"/chat/{usercontacts[0].hashtagid}" )            
+
+
+
+@csrf_exempt
+@login_required(login_url='/')  
+def MakeFirstContact(request):
+    if request.method == 'POST':
+        jsonData    = json.loads(request.body)
+        search      = jsonData.get("search")
+
+    pass
+
+@csrf_exempt
+@login_required(login_url='/')  
+def AcceptContact(request):
+    if request.method == 'POST':
+        jsonData    = json.loads(request.body)
+        search      = jsonData.get("search")
+
+
+    
+    pass
+
+
 
 @csrf_exempt
 @login_required(login_url='/')  
@@ -85,7 +131,7 @@ def getBubbles(request):
         if kwargs['querytype'] == "chat":
             messages = GetSingleChatM(userID, kwargs['queryid'])
         elif kwargs['querytype'] == "groupchat":
-            print("groupchat")
+            #print("groupchat")
             messages = GetGroupChatM(userID, kwargs['queryid'])
 
     return JsonResponse(messages, safe=False )

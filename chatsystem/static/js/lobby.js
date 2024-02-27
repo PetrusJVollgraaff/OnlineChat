@@ -2,10 +2,8 @@ var searchtimeout = undefined;
 
 function searchUsers(elm, evt){
     var search = elm.value
-    
-    console.log(search)
 
-	if(searchtimeout){
+    if(searchtimeout){
 		clearTimeout(searchtimeout);
 		searchtimeout = undefined;
 	}
@@ -27,10 +25,19 @@ function ShowSearchModal(search, elm){
     })
     .then((response) => { return response.json() })
     .then((data) => { 
-        console.log(elm)
-        console.log(elm.nextElementSibling)
-        console.log( data.map(obj => {return `<option value='${obj.id}'>${obj.username}</option>`}).join('') )
-        elm.nextElementSibling.innerHTML = data.map(obj => {return `<option value='${obj.id}'>${obj.username}</option>`}).join('')
-        console.log(data)
+        elm.nextElementSibling.innerHTML = data.map(obj => {return `<div class="search_user_option" data-id='${obj.id}'>${obj.username}</div>`}).join('')
+        elm.nextElementSibling.querySelectorAll(".search_user_option").forEach(function(searchuser){
+            searchuser.onclick = function(e){
+                OpenSearchSelect(this.dataset.id);
+            }
+        });
+    })
+}
+
+function OpenSearchSelect(searchid){
+    fetch('/SearchOpen', {
+        method: "POST",
+        headers: { "X-CSRFToken": getCookie("csrftoken"), },
+        body: JSON.stringify({ searchid: searchid }),
     })
 }

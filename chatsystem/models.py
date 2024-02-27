@@ -21,6 +21,7 @@ def _createHash(value):
 class OneOnOneChat(models.Model):
     initiator       = models.ForeignKey(CustomerUser, related_name='initiator', on_delete=models.CASCADE,null=True, blank=True )
     responder       = models.ForeignKey(CustomerUser, related_name='responder', on_delete=models.CASCADE,null=True, blank=True )
+    ishandshack     = models.BooleanField(default=False)
     hashtagid       = models.TextField(null=False, blank=False, unique=True, editable=False)
     addeddate       = models.DateTimeField('date added', editable=False, auto_now_add=True)
     removedate      = models.DateTimeField(null=True, blank=True)

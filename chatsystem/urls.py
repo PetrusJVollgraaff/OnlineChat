@@ -8,7 +8,11 @@ urlpatterns = [
     
     path('', views.index, name='index'),
     path("getBubbles", views.getBubbles, name="getbubbles"),
+    
     path("<str:querytype>/<str:queryid>/", views.Chat, name="chat"),
     path("<str:querytype>/<str:queryid>/", views.GroupChat, name="groupchat"),
-    path("SearchUser", views.SearchUser, name='searchuser')
+    
+    
+    path("SearchUser", views.SearchUser, name='searchuser'),
+    path("SearchOpen", views.SearchOpen, name='searchopen')
 ]

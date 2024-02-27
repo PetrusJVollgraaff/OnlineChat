@@ -72,3 +72,25 @@ ul.navbar-nav.mr-auto li{
     border: none;
     box-shadow: 0px 0px 3px lightgray;
 }
+
+.search_user_option {
+    background: var(--white_text);
+    width: fit-content;
+    padding: 5px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+
+.search_user_option:last-child {
+    margin-bottom: 0px;
+}
+
+div#usersList {
+    background: var(--tab_backcolor);
+    width: fit-content;
+    position: absolute;
+    right: 0px;
+    margin-top: 5px;
+    padding: 5px;
+    z-index: 9;
+}

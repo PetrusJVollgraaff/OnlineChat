@@ -139,7 +139,6 @@ class VideoSystem{
         console.log("world")
         document.querySelector("#End_Btn").addEventListener("click", function(){
             videoSocket.send(JSON.stringify({type: 'call_end'})); 
-            
             _.localStream = undefined
         })
     }
