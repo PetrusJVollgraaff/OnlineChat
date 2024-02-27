@@ -19,3 +19,10 @@ Using WebRTC and django to create an Online Chat System
 > * Searching for User and add to contact
 > * Create a Group Chat
 > * Screen Sharing
+
+
+### Current Account Users:
+> * User1, password: password 
+> * User2, password: password 
+> * User3, password: password 
+> * User4, password: password 
